@@ -67,7 +67,7 @@ def conformal_predict(model, x_calib, y_calib, x_test, confidence_level=0.95, pr
         Minimum probability threshold for including a label in the predictions.
     top_k : int, optional (default=None)
         Maximum number of labels to output per test sample.
-    sort_by_proba : bool, optional (default=False)
+    sort_by_proba : bool, optional (default=True)
         Whether to sort the output labels by their prediction probabilities.
     ----------
     Returns
@@ -146,8 +146,7 @@ def accuracy_score_conformal_predictions(y_test, conformal_predictions):
     accuracy = np.mean(correct_preds)
     return accuracy
 
-
-def show_conformal_predictions_summary(model, x_calib, y_calib, x_test, y_test, confidence_level=0.95):
+def show_conformal_predictions_summary(model, x_calib, y_calib, x_test, y_test, confidence_level=0.95, proba_threshold=None, top_k=None, sort_by_proba=True):
     '''
     Display a summary of conformal predictions made by the provided model.
     ----------
@@ -163,13 +162,19 @@ def show_conformal_predictions_summary(model, x_calib, y_calib, x_test, y_test, 
         Feature data for which predictions are made.
     y_test : array-like, shape = [n_test_samples]
         True labels for the test data.
-    confidence_level : float, default=0.95
-        The confidence level for conformal prediction intervals.
+    confidence_level : float, optional (default=0.95)
+        Confidence level for the conformal prediction. It should be between 0 and 1.
+    proba_threshold : float, optional (default=None)
+        Minimum probability threshold for including a label in the predictions.
+    top_k : int, optional (default=None)
+        Maximum number of labels to output per test sample.
+    sort_by_proba : bool, optional (default=True)
+        Whether to sort the output labels by their prediction probabilities.
     '''
    # Display the confidence level used
     print('** Confidence Level: %.2f' % confidence_level)
     # Generate conformal predictions using the model and provided calibration data
-    conformal_predictions = conformal_predict(model, x_calib, y_calib, x_test, confidence_level=confidence_level)
+    conformal_predictions = conformal_predict(model, x_calib, y_calib, x_test, confidence_level=confidence_level, proba_threshold=proba_threshold, top_k=top_k, sort_by_proba=sort_by_proba)
     # Calculate and print the accuracy of the conformal predictions
     accuracy = accuracy_score_conformal_predictions(y_test, conformal_predictions)
     print('** Conformal Prediction Accuracy: %.3f' % accuracy)
