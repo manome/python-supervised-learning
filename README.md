@@ -1,6 +1,7 @@
 # Summary
 
-Sample code to perform supervised learning.
+This project provides sample code for performing supervised learning.
+
 Compatible with Python3.6 and above.
 
 ## Requirements
